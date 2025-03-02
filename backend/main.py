@@ -1,8 +1,9 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from blockchain import store_hash_on_chain, verify_hash_on_chain
 from encrypt import encrypt_data, decrypt_data
+from pinata import upload_json_to_pinata  # Import hàm upload từ pinata.py
 import uvicorn
 
 app = FastAPI()
@@ -50,6 +51,19 @@ def verify_hash(hash_value: str):
     try:
         exists = verify_hash_on_chain(hash_value)
         return {"exists": exists}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+# Endpoint mới: Upload dữ liệu lên Pinata
+@app.post("/uploadToPinata")
+def upload_to_pinata_endpoint(data: dict = Body(...)):
+    """
+    Endpoint để upload một đối tượng JSON lên Pinata.
+    Nhận JSON body và trả về IPFS hash.
+    """
+    try:
+        ipfs_hash = upload_json_to_pinata(data)
+        return {"ipfs_hash": ipfs_hash}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

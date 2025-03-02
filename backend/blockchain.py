@@ -56,10 +56,6 @@ def store_hash_on_chain(hash_value: str):
     tx_receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
     return tx_receipt.transaction_hash.hex()
 
-
-
-
-
 def verify_hash_on_chain(hash_value: str):
     """
     Kiểm tra hash có tồn tại trên blockchain hay không.
