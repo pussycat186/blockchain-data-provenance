@@ -1,0 +1,7 @@
+fastapi
+uvicorn
+pandas
+requests
+python-dotenv
+web3
+pycryptodome
